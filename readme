@@ -1,0 +1,26 @@
+# 개발 환경 설정
+hyunjeong2816@gmail.com
+
+1. visual studio code 설치
+- 확장프로그램 설치
+Python, Code Runner, Jupyter, Autopep8
+
+
+2. 아나콘다 설치
+- https://www.anaconda.com/download
+- Anaconda Navigator 실행
+- Environments 메뉴 > Create 클릭
+Create new environment
+Name: pystudy
+Packages: Python 3.6.13 (3.6.x 선택), R 선택안함
+
+# Python Packages (PowerShell in vscode)
+- pyquery: a jquery-like library for python
+pip3 install pyquery
+- http 통신모듈
+pip3 install requests
+- Jupyter Notebook
+pip3 install jupyter
+pip3 install ipykernel
+pip3 install nest_asyncio
+python -m ipykernel install --user --name pystudy --display-name jupyter

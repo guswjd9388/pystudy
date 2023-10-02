@@ -1,0 +1,9 @@
+{
+    "python.autoComplete.extraPaths": [],
+    "python.defaultInterpreterPath": "C:\\Users\\F00168\\AppData\\Local\\anaconda3\\python.exe",
+    "python.analysis.extraPaths": [],
+    "[python]": {
+        "editor.defaultFormatter": "ms-python.autopep8"
+    },
+    "python.formatting.provider": "none"
+}

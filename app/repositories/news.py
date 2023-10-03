@@ -71,10 +71,15 @@ async def update_abstractive(id: int, abstractive: str):
 async def select_top5_news(type: str = None, user_id: BIGINT = None):
     query = f'''
 WITH TARGET AS (
-	SELECT a.id, b.type, b.name, IFNULL(c.prev_news_id, 0) AS prev_news_id
-	FROM users a
-	LEFT OUTER JOIN notice_history c ON c.user_id = a.id
-	, batch b
+	SELECT a.id, b.type, b.name
+         , IFNULL((
+            SELECT ina.prev_news_id
+            FROM notice_history ina
+            WHERE ina.user_id = a.id
+            AND ina.type = b.type
+            LIMIT 1
+         ), 0) AS prev_news_id
+	FROM users a, batch b
 	WHERE a.use_talk = 1
     {'AND a.id = :user_id' if user_id is not None else ''}
 ), NEWS AS (
@@ -103,6 +108,7 @@ WHERE a.rn < 6
 ORDER BY a.user_id, a.batch_type, a.rn DESC
 '''
     try:
+        print(query)
         result = await session.execute(text(query), {
             "type": type,
             "user_id": user_id
@@ -110,4 +116,3 @@ ORDER BY a.user_id, a.batch_type, a.rn DESC
         return result.all()
     finally:
         await session.aclose()
-    

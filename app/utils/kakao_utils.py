@@ -53,7 +53,7 @@ async def talk_memo_send_list(key: dict, data: list):
     if len(data) > 0:
         template_args = {
             'news_title': key['batch_name'],
-            'news_title_path': 'news-list/' + key['batch_type']
+            'news_title_path': 'news-list/' + key['batch_type'].replace('_', '-').lower()
         }
         for i, d in enumerate(data):
             template_args.update({

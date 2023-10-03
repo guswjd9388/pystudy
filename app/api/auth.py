@@ -13,6 +13,11 @@ REDIRECT_URI = 'https://asdf.com/auth/kakao'
 REDIRECT_URI_DEV = 'http://localhost:8000/api/auth/kakao'
 
 
+@router.get('/echo', name='auth:echo')
+async def echo():
+    return "echo success"
+
+
 @router.get('/kakao', name='auth:kakao')
 async def kakao(code: str):
     response = await http_utils.post(URL_KAUTH_TOKEN, data={
@@ -35,7 +40,7 @@ async def kakao(code: str):
     })
 
     if response.status != 200:
-        raise HTTPException(status_code=400, detail= await response.text())
+        raise HTTPException(status_code=400, detail=await response.text())
 
     data = await response.json()
     id = data['id']

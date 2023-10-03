@@ -5,12 +5,15 @@ from pyquery import PyQuery as pq
 import asyncio
 
 URL_IT_GEEK_NEWS_HOME = 'https://news.hada.io'
+BATCH_TYPE = 'IT_GEEK_NEWS'
+
+SIZE = 0
 
 
 async def __scrap_news(topic):
     topic = pq(topic)
 
-    type = 'IT_GEEK_NEWS'
+    type = BATCH_TYPE
     url = topic.find('.topictitle').find('a').eq(0).attr('href')
     title = topic.find('.topictitle').eq(0).text()
     img_url = None
@@ -40,14 +43,13 @@ async def __scrap_news(topic):
 
 
 async def exec():
-    if await batch.executeable(type='IT_GEEK_NEWS') is True:
+    if await batch.executeable(type=BATCH_TYPE) is True:
+        await batch.start(type=BATCH_TYPE)
         response = await http_utils.get(URL_IT_GEEK_NEWS_HOME)
         doc = response.html.pq
         topic_list = doc.find('.topics').find('.topic_row')
         futures = [asyncio.ensure_future(__scrap_news(topic))
                    for topic in topic_list]
-
-        await batch.start(type='IT_GEEK_NEWS')
         has_error = False
         try:
             await asyncio.gather(*futures)
@@ -55,6 +57,6 @@ async def exec():
             has_error = True
             print(error)
         if has_error is True:
-            await batch.error(type='IT_GEEK_NEWS')
+            await batch.error(type=BATCH_TYPE)
         else:
-            await batch.end(type='IT_GEEK_NEWS')
+            await batch.end(type=BATCH_TYPE)

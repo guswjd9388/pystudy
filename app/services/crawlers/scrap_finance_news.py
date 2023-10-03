@@ -40,13 +40,12 @@ async def __scrap(item: str, type: str):
 
 async def __exec_rss(rss_url: str, type: str):
     if await batch.executeable(type=type) is True:
+        await batch.start(type=type)
         response = await http_utils.get(rss_url)
         doc = pq(string_utils.remove_xml_tag(response.text))
         items = doc.find('item')
         futures = [asyncio.ensure_future(__scrap(item, type))
                    for item in items]
-
-        await batch.start(type=type)
         has_error = False
         try:
             await asyncio.gather(*futures)

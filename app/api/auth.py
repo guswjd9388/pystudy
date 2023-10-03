@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Body, Depends, HTTPException
 from app.core.config import KAKAO_REST_API_KEY
 from app.utils import http_utils
-from app.core.db import session
+from app.core import config
 from app.repositories.users import Users, exists_id, insert_user, update_user
 
 router = APIRouter()
@@ -9,8 +9,7 @@ router = APIRouter()
 URL_KAUTH_TOKEN = 'https://kauth.kakao.com/oauth/token'
 URL_KAPI_USER_ME = 'https://kapi.kakao.com/v2/user/me'
 URL_KAPI_TALK_PROFILE = 'https://kapi.kakao.com/v1/api/talk/profile'
-REDIRECT_URI = 'https://asdf.com/auth/kakao'
-REDIRECT_URI_DEV = 'http://localhost:8000/api/auth/kakao'
+REDIRECT_URI =  config.HOST + '/auth/kakao'
 
 
 @router.get('/echo', name='auth:echo')
@@ -23,7 +22,7 @@ async def kakao(code: str):
     response = await http_utils.post(URL_KAUTH_TOKEN, data={
         'grant_type': 'authorization_code',
         'client_id': KAKAO_REST_API_KEY,
-        'redirect_uri': REDIRECT_URI_DEV,
+        'redirect_uri': REDIRECT_URI,
         'code': code
     })
 

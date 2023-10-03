@@ -9,7 +9,6 @@ class ReabstractiveReq(BaseModel):
 
 
 async def reabstractive_by_id(id: int):
-    print(id)
     n = await news.get(id)
     if n is not None:
         original = n.original

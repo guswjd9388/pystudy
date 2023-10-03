@@ -22,10 +22,3 @@ session = async_scoped_session(
     session_factory=async_session_factory,
     scopefunc=current_task,
 )
-
-# async def get_session() -> AsyncSession:
-#     session = AsyncSession(bind=engine)
-#     try:
-#         yield session
-#     finally:
-#         await session.close

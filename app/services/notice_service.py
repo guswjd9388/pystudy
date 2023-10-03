@@ -40,7 +40,7 @@ async def exec(param: NoticeReq):
         if __key_diff(key=key, new_key=new_key) is True:
             if len(data) > 0:
                 await kakao_utils.talk_memo_send_list(key, data)
-                await notice_history.upsert(user_id=key['talk_user_id'], type=key['batch_type'], prev_news_id=data[-1]['news_id'])
+                await notice_history.upsert(user_id=key['talk_user_id'], type=key['batch_type'], prev_news_id=data[0]['news_id'])
                 data.clear()
 
         key = new_key
@@ -53,5 +53,5 @@ async def exec(param: NoticeReq):
 
     if len(data) > 0:
         await kakao_utils.talk_memo_send_list(key, data)
-        await notice_history.upsert(user_id=key['talk_user_id'], type=key['batch_type'], prev_news_id=data[-1]['news_id'])
+        await notice_history.upsert(user_id=key['talk_user_id'], type=key['batch_type'], prev_news_id=data[0]['news_id'])
         data.clear()

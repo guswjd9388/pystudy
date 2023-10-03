@@ -53,7 +53,7 @@ async def talk_memo_send_list(key: dict, data: list):
     if len(data) > 0:
         template_args = {
             'news_title': key['batch_name'],
-            'news_title_path': 'news/' + key['batch_type']
+            'news_title_path': 'news-list/' + key['batch_type']
         }
         for i, d in enumerate(data):
             template_args.update({
@@ -79,7 +79,8 @@ async def talk_memo_default_send_list(key: dict, data: list):
                 'description':  d['news_abstractive'],
                 'image_url': d['img_url'],
                 'link': {
-                    'web_url': 'http://ec2-13-124-209-170.ap-northeast-2.compute.amazonaws.com'
+                    'mobile_url': config.HOST + '/news/' + str(d['news_id']),
+                    'web_url': config.HOST + '/news/' + str(d['news_id'])
                 }
             })
 
@@ -87,7 +88,8 @@ async def talk_memo_default_send_list(key: dict, data: list):
             'object_type': 'list',
             'header_title': key['batch_name'],
             'header_link': {
-                'web_url': 'http://ec2-13-124-209-170.ap-northeast-2.compute.amazonaws.com'
+                'mobile_url': config.HOST + '/news-list/' + key['batch_type'].lower(),
+                'web_url': config.HOST + '/news/' + key['batch_type'].lower()
             },
             'contents': contents
         }

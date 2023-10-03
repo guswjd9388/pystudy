@@ -1,6 +1,5 @@
 from app.core.db import Base, session
-from sqlalchemy import insert, exists, update, Integer, Boolean, Column, String, Text, BIGINT, DATETIME
-from sqlalchemy.sql import func
+from sqlalchemy import insert, exists, update, Column, String, BIGINT
 
 
 class NoticeHistory(Base):

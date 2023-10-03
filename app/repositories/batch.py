@@ -19,17 +19,21 @@ class Batch(Base):
 
 async def exists_type(type: str) -> bool:
     query = exists(Batch).where(Batch.type == type).select()
-    result = await session.execute(query)
-    await session.close()
-    return result.scalar()
+    try:
+        result = await session.execute(query)
+        return result.scalar()
+    finally:
+        await session.aclose()
 
 
 async def executeable(type: str) -> bool:
     query = exists(Batch).where(Batch.type == type,
                                 Batch.status.in_(['START', 'DO'])).select()
-    result = await session.execute(query)
-    await session.close()
-    return result.scalar() is False
+    try:
+        result = await session.execute(query)
+        return result.scalar() is False
+    finally:
+        await session.aclose()
 
 
 async def start(type: str):
@@ -40,30 +44,38 @@ async def start(type: str):
     else:
         query = insert(Batch).values(type=type, status='START', progress=0,
                                      round=1, started_at=func.now(),  ended_at=None)
-    await session.execute(query)
-    await session.commit()
-    await session.aclose()
+    try:
+        await session.execute(query)
+        await session.commit()
+    finally:
+        await session.aclose()
 
 
 async def end(type: str):
     query = update(Batch).values(type=type, status='END', progress=100,
                                  ended_at=func.now()).where(Batch.type == type)
-    await session.execute(query)
-    await session.commit()
-    await session.aclose()
+    try:
+        await session.execute(query)
+        await session.commit()
+    finally:
+        await session.aclose()
 
 
 async def error(type: str):
     query = update(Batch).values(type=type, status='ERROR',
                                  ended_at=func.now()).where(Batch.type == type)
-    await session.execute(query)
-    await session.commit()
-    await session.aclose()
+    try:
+        await session.execute(query)
+        await session.commit()
+    finally:
+        await session.aclose()
 
 
 async def progress(type: str, progress: Integer):
-    query = update(Batch).values(status='WORK', progress=progress,
+    query = update(Batch).values(progress=progress,
                                  ended_at=func.now()).where(Batch.type == type)
-    await session.execute(query)
-    await session.commit()
-    await session.aclose()
+    try:
+        await session.execute(query)
+        await session.commit()
+    finally:
+        await session.aclose()

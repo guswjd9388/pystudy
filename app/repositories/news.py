@@ -21,41 +21,51 @@ class News(Base):
 
 async def get(id: int) -> News:
     query = select(News).where(News.id == id)
-    result = await session.execute(query)
-    await session.aclose()
-    data = result.one_or_none()
-    return data[0] if len(data) > 0 else None
+    try:
+        result = await session.execute(query)
+        data = result.one_or_none()
+        return data[0] if len(data) > 0 else None
+    finally:
+        await session.aclose()
 
 
 async def exists_url(url: str) -> bool:
     query = exists(News).where(News.url == url).select()
-    result = await session.execute(query)
-    await session.aclose()
-    return result.scalar()
+    try:
+        result = await session.execute(query)
+        return result.scalar()
+    finally:
+        await session.aclose()
 
 
 async def insert_item(type, url, title, img_url, original, abstractive, written_at):
     query = insert(News).values(type=type, url=url, title=title,  img_url=img_url,
                                 original=original, abstractive=abstractive, written_at=written_at)
-    await session.execute(query)
-    await session.commit()
-    await session.aclose()
+    try:
+        await session.execute(query)
+        await session.commit()
+    finally:
+        await session.aclose()
 
 
 async def update_image_url(type, url, img_url):
     query = update(News).values(type=type, url=url, img_url=img_url).where(
         News.type == type, News.url == url)
-    await session.execute(query)
-    await session.commit()
-    await session.aclose()
+    try:
+        await session.execute(query)
+        await session.commit()
+    finally:
+        await session.aclose()
 
 
 async def update_abstractive(id: int, abstractive: str):
     query = update(News).values(
         abstractive=abstractive, updated_at=func.now()).where(News.id == id)
-    await session.execute(query)
-    await session.commit()
-    await session.aclose()
+    try:
+        await session.execute(query)
+        await session.commit()
+    finally:
+        await session.aclose()
 
 
 async def select_top5_news(type: str = None, user_id: BIGINT = None):
@@ -92,9 +102,12 @@ FROM NEWS a
 WHERE a.rn < 6
 ORDER BY a.user_id, a.batch_type, a.rn DESC
 '''
-    result = await session.execute(text(query), {
-        "type": type,
-        "user_id": user_id
-    })
-    await session.aclose()
-    return result.all()
+    try:
+        result = await session.execute(text(query), {
+            "type": type,
+            "user_id": user_id
+        })
+        return result.all()
+    finally:
+        await session.aclose()
+    

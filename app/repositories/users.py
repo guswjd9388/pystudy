@@ -24,7 +24,7 @@ async def get(id: int) -> Users:
         data = result.one_or_none()
         return data[0] if len(data) > 0 else None
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def exists_id(id: BIGINT) -> bool:
@@ -33,7 +33,7 @@ async def exists_id(id: BIGINT) -> bool:
         result = await session.execute(query)
         return result.scalar()
     finally:
-        await session.close()
+        await session.remove()
 
 
 async def insert_user(id: BIGINT, nickname: String, thumbnail_image_url: String, access_token: String, refresh_token: String, use_talk: Boolean):
@@ -45,7 +45,7 @@ async def insert_user(id: BIGINT, nickname: String, thumbnail_image_url: String,
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def update_user(id: BIGINT, nickname: String, thumbnail_image_url: String, access_token: String, refresh_token: String, use_talk: Boolean):
@@ -55,7 +55,7 @@ async def update_user(id: BIGINT, nickname: String, thumbnail_image_url: String,
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def update_token(id: int, access_token: str, refresh_token: str):
@@ -70,4 +70,4 @@ async def update_token(id: int, access_token: str, refresh_token: str):
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()

@@ -8,8 +8,6 @@ typing
 starlette
 sqlalchemy
 aiomysql
-loguru
 openai
 python-dateutil
-pandas
 uvicorn

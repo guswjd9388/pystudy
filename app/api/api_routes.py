@@ -1,4 +1,4 @@
-from app.api import auth, batch
+from app.api import auth, batch, home
 from fastapi import APIRouter
 
 all_routes = APIRouter()

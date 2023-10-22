@@ -23,7 +23,7 @@ async def exists_type(type: str) -> bool:
         result = await session.execute(query)
         return result.scalar()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def executeable(type: str) -> bool:
@@ -33,7 +33,7 @@ async def executeable(type: str) -> bool:
         result = await session.execute(query)
         return result.scalar() is False
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def start(type: str):
@@ -48,7 +48,7 @@ async def start(type: str):
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def end(type: str):
@@ -58,7 +58,7 @@ async def end(type: str):
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def error(type: str):
@@ -68,7 +68,7 @@ async def error(type: str):
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def progress(type: str, progress: Integer):
@@ -78,4 +78,4 @@ async def progress(type: str, progress: Integer):
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()

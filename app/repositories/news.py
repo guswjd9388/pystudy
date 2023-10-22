@@ -26,7 +26,7 @@ async def get(id: int) -> News:
         data = result.one_or_none()
         return data[0] if len(data) > 0 else None
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def exists_url(url: str) -> bool:
@@ -35,7 +35,7 @@ async def exists_url(url: str) -> bool:
         result = await session.execute(query)
         return result.scalar()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def insert_item(type, url, title, img_url, original, abstractive, written_at):
@@ -45,7 +45,7 @@ async def insert_item(type, url, title, img_url, original, abstractive, written_
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def update_image_url(type, url, img_url):
@@ -55,7 +55,7 @@ async def update_image_url(type, url, img_url):
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def update_abstractive(id: int, abstractive: str):
@@ -65,7 +65,7 @@ async def update_abstractive(id: int, abstractive: str):
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()
 
 
 async def select_top5_news(type: str = None, user_id: BIGINT = None):
@@ -108,11 +108,10 @@ WHERE a.rn < 6
 ORDER BY a.user_id, a.batch_type, a.rn DESC
 '''
     try:
-        print(query)
         result = await session.execute(text(query), {
             "type": type,
             "user_id": user_id
         })
         return result.all()
     finally:
-        await session.aclose()
+        await session.remove()

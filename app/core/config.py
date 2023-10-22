@@ -7,7 +7,7 @@ PROJECT_NAME: str = config('PROJECT_NAME', cast=str)
 VERSION: str = config('VERSION', cast=str)
 DEBUG: bool = config('DEBUG', cast=bool)
 
-HOST: str = config('HOST', cast=str)
+EXEC_MODE: str = config('EXEC_MODE', cast=str)
 
 DB_HOST: str = config('DB_HOST', cast=str)
 DB_PORT: int = config('DB_PORT', cast=int)

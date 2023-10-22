@@ -16,7 +16,6 @@ async def abstractive(original, max_tokens = 128, temperature = 0.1, top_p = 0.2
     async with lock:
         await asyncio.sleep(0.2)
         async with aiohttp.ClientSession() as session:
-            print(datetime.datetime.now())
             async with session.post(URL, json={
                 'prompt': original + '\n\n한줄 요약:\n',
                 'max_tokens': 128,

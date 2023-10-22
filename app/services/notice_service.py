@@ -15,7 +15,6 @@ def __key_diff(key, new_key) -> bool:
 
 async def exec(param: NoticeReq):
     result = await news.select_top5_news(type=param.type, user_id=param.user_id)
-
     key = {
         'talk_user_id': '',
         'batch_type': '',

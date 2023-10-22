@@ -25,4 +25,4 @@ async def upsert(user_id: int, type: str, prev_news_id):
         await session.execute(query)
         await session.commit()
     finally:
-        await session.aclose()
+        await session.remove()
